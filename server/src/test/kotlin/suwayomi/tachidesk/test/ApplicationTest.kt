@@ -155,9 +155,10 @@ open class ApplicationTest {
             Locale.setDefault(Locale.ENGLISH)
 
             // in-memory database, don't discard database between connections/transactions
-            val db = Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;", "org.h2.Driver")
+            Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;", "org.h2.Driver")
 
-            databaseUp(db)
+            // databaseUp now takes no arguments; call without passing db
+            databaseUp()
 
             LocalSource.register()
         }

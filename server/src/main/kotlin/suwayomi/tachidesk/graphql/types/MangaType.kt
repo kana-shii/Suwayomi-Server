@@ -70,6 +70,7 @@ class MangaType(
             dataFetchingEnvironment.getDataLoader<Int, Int>("DownloadedChapterCountForMangaDataLoader")?.clear(mangaId)
             dataFetchingEnvironment.getDataLoader<Int, Int>("UnreadChapterCountForMangaDataLoader")?.clear(mangaId)
             dataFetchingEnvironment.getDataLoader<Int, Int>("BookmarkedChapterCountForMangaDataLoader")?.clear(mangaId)
+            dataFetchingEnvironment.getDataLoader<Int, Int>("FillermarkedChapterCountForMangaDataLoader")?.clear(mangaId)
             dataFetchingEnvironment.getDataLoader<Int, Int>("HasDuplicateChaptersForMangaDataLoader")?.clear(mangaId)
             dataFetchingEnvironment.getDataLoader<Int, ChapterType>("LastReadChapterForMangaDataLoader")?.clear(mangaId)
             dataFetchingEnvironment.getDataLoader<Int, ChapterType>("LatestReadChapterForMangaDataLoader")?.clear(mangaId)
@@ -135,6 +136,9 @@ class MangaType(
 
     fun bookmarkCount(dataFetchingEnvironment: DataFetchingEnvironment): CompletableFuture<Int> =
         dataFetchingEnvironment.getValueFromDataLoader("BookmarkedChapterCountForMangaDataLoader", id)
+
+    fun fillermarkCount(dataFetchingEnvironment: DataFetchingEnvironment): CompletableFuture<Int> =
+        dataFetchingEnvironment.getValueFromDataLoader("FillermarkedChapterCountForMangaDataLoader", id)
 
     fun hasDuplicateChapters(dataFetchingEnvironment: DataFetchingEnvironment): CompletableFuture<Boolean> =
         dataFetchingEnvironment.getValueFromDataLoader("HasDuplicateChaptersForMangaDataLoader", id)

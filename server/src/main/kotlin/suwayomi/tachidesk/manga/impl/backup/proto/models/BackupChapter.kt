@@ -12,6 +12,7 @@ data class BackupChapter(
     @ProtoNumber(3) var scanlator: String? = null,
     @ProtoNumber(4) var read: Boolean = false,
     @ProtoNumber(5) var bookmark: Boolean = false,
+    @ProtoNumber(15) var fillermark: Boolean = false,
     // lastPageRead is called progress in 1.x
     @ProtoNumber(6) var lastPageRead: Int = 0,
     @ProtoNumber(7) var dateFetch: Long = 0,

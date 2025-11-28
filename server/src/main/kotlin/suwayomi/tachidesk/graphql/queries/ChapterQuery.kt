@@ -122,6 +122,7 @@ class ChapterQuery {
         val mangaId: Int? = null,
         val isRead: Boolean? = null,
         val isBookmarked: Boolean? = null,
+        val isFillermarked: Boolean? = null,
         val lastPageRead: Int? = null,
         val lastReadAt: Long? = null,
         val sourceOrder: Int? = null,
@@ -141,6 +142,7 @@ class ChapterQuery {
             opAnd.eq(mangaId, ChapterTable.manga)
             opAnd.eq(isRead, ChapterTable.isRead)
             opAnd.eq(isBookmarked, ChapterTable.isBookmarked)
+            opAnd.eq(isFillermarked, ChapterTable.isFillermarked)
             opAnd.eq(lastPageRead, ChapterTable.lastPageRead)
             opAnd.eq(lastReadAt, ChapterTable.lastReadAt)
             opAnd.eq(sourceOrder, ChapterTable.sourceOrder)
@@ -163,6 +165,7 @@ class ChapterQuery {
         val mangaId: IntFilter? = null,
         val isRead: BooleanFilter? = null,
         val isBookmarked: BooleanFilter? = null,
+        val isFillermarked: BooleanFilter? = null,
         val lastPageRead: IntFilter? = null,
         val lastReadAt: LongFilter? = null,
         val sourceOrder: IntFilter? = null,
@@ -186,6 +189,7 @@ class ChapterQuery {
                 andFilterWithCompareEntity(ChapterTable.manga, mangaId),
                 andFilterWithCompare(ChapterTable.isRead, isRead),
                 andFilterWithCompare(ChapterTable.isBookmarked, isBookmarked),
+                andFilterWithCompare(ChapterTable.isFillermarked, isFillermarked),
                 andFilterWithCompare(ChapterTable.lastPageRead, lastPageRead),
                 andFilterWithCompare(ChapterTable.lastReadAt, lastReadAt),
                 andFilterWithCompare(ChapterTable.sourceOrder, sourceOrder),

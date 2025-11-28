@@ -103,6 +103,7 @@ object BackupMangaHandler {
                                     it.scanlator,
                                     it.read,
                                     it.bookmarked,
+                                    it.fillermarked,
                                     it.lastPageRead,
                                     it.fetchedAt.seconds.inWholeMilliseconds,
                                     it.uploadDate,
@@ -330,6 +331,7 @@ object BackupMangaHandler {
                         this[ChapterTable.isRead] = chapter.read
                         this[ChapterTable.lastPageRead] = chapter.lastPageRead.coerceAtLeast(0)
                         this[ChapterTable.isBookmarked] = chapter.bookmark
+                        this[ChapterTable.isFillermarked] = chapter.fillermark
 
                         this[ChapterTable.fetchedAt] = chapter.dateFetch.milliseconds.inWholeSeconds
 
@@ -351,6 +353,7 @@ object BackupMangaHandler {
                         this[ChapterTable.lastPageRead] =
                             max(backupChapter.lastPageRead, dbChapter[ChapterTable.lastPageRead]).coerceAtLeast(0)
                         this[ChapterTable.isBookmarked] = backupChapter.bookmark || dbChapter[ChapterTable.isBookmarked]
+                        this[ChapterTable.isFillermarked] = backupChapter.fillermark || dbChapter[ChapterTable.isFillermarked]
                     }
 
                     if (flags.includeHistory) {

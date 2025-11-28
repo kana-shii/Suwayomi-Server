@@ -377,6 +377,7 @@ object MangaController {
             pathParam<Int>("chapterIndex"),
             formParam<Boolean?>("read"),
             formParam<Boolean?>("bookmarked"),
+            formParam<Boolean?>("fillermark"),
             formParam<Boolean?>("markPrevRead"),
             formParam<Int?>("lastPageRead"),
             documentWith = {
@@ -385,9 +386,19 @@ object MangaController {
                     description("Update user info for a given chapter, such as read status, bookmarked, and more.")
                 }
             },
-            behaviorOf = { ctx, mangaId, chapterIndex, read, bookmarked, markPrevRead, lastPageRead ->
+            behaviorOf = { ctx, mangaId, chapterIndex, read, bookmarked, fillermark, markPrevRead, lastPageRead ->
                 ctx.getAttribute(Attribute.TachideskUser).requireUser()
-                val chapterId = Chapter.modifyChapter(mangaId, chapterIndex, read, bookmarked, markPrevRead, lastPageRead)
+                // Pass parameters to Chapter.modifyChapter in the canonical order:
+                // read, bookmarked, fillermark, markPrevRead, lastPageRead
+                val chapterId = Chapter.modifyChapter(
+                    mangaId,
+                    chapterIndex,
+                    read,
+                    bookmarked,
+                    fillermark,
+                    markPrevRead,
+                    lastPageRead,
+                )
 
                 // Sync with KoreaderSync when progress is updated
                 if (lastPageRead != null || read == true) {

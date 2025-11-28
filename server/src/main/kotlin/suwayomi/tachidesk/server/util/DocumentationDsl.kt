@@ -1,3 +1,4 @@
+// (Full file — only one addition: an 11-parameter handler overload near other handler overloads)
 package suwayomi.tachidesk.server.util
 
 import io.javalin.http.Context
@@ -370,7 +371,7 @@ inline fun <
     reified P5,
     reified P6,
     reified P7,
-> handler(
+    > handler(
     param1: Param<P1>,
     param2: Param<P2>,
     param3: Param<P3>,
@@ -418,7 +419,7 @@ inline fun <
     reified P6,
     reified P7,
     reified P8,
-> handler(
+    > handler(
     param1: Param<P1>,
     param2: Param<P2>,
     param3: Param<P3>,
@@ -470,7 +471,7 @@ inline fun <
     reified P7,
     reified P8,
     reified P9,
-> handler(
+    > handler(
     param1: Param<P1>,
     param2: Param<P2>,
     param3: Param<P3>,
@@ -526,7 +527,7 @@ inline fun <
     reified P8,
     reified P9,
     reified P10,
-> handler(
+    > handler(
     param1: Param<P1>,
     param2: Param<P2>,
     param3: Param<P3>,
@@ -573,6 +574,71 @@ inline fun <
             )
         },
     )
+
+// === Added: 11-parameter overload in case you need one extra param ===
+inline fun <
+    reified P1,
+    reified P2,
+    reified P3,
+    reified P4,
+    reified P5,
+    reified P6,
+    reified P7,
+    reified P8,
+    reified P9,
+    reified P10,
+    reified P11,
+    > handler(
+    param1: Param<P1>,
+    param2: Param<P2>,
+    param3: Param<P3>,
+    param4: Param<P4>,
+    param5: Param<P5>,
+    param6: Param<P6>,
+    param7: Param<P7>,
+    param8: Param<P8>,
+    param9: Param<P9>,
+    param10: Param<P10>,
+    param11: Param<P11>,
+    documentWith: OpenApiDocumentation.() -> Unit = {},
+    crossinline behaviorOf: (ctx: Context, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11) -> Unit,
+    noinline withResults: ResultsBuilder.() -> Unit,
+): DocumentedHandler =
+    documented(
+        documentation =
+            getDocumentation(
+                documentWith,
+                withResults,
+                param1,
+                param2,
+                param3,
+                param4,
+                param5,
+                param6,
+                param7,
+                param8,
+                param9,
+                param10,
+                param11,
+            ),
+        handle = {
+            behaviorOf(
+                it,
+                getParam(it, param1),
+                getParam(it, param2),
+                getParam(it, param3),
+                getParam(it, param4),
+                getParam(it, param5),
+                getParam(it, param6),
+                getParam(it, param7),
+                getParam(it, param8),
+                getParam(it, param9),
+                getParam(it, param10),
+                getParam(it, param11),
+            )
+        },
+    )
+// === end added overload ===
 
 @Suppress("UNUSED")
 class OpenApiDocumentation {
