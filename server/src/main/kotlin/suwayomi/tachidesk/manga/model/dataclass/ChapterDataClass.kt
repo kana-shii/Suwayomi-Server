@@ -21,6 +21,7 @@ data class ChapterDataClass(
     val read: Boolean,
     /** chapter is bookmarked */
     val bookmarked: Boolean,
+    val fillermarked: Boolean,
     /** last read page, zero means not read/no data */
     val lastPageRead: Int,
     /** last read page, zero means not read/no data */
@@ -63,6 +64,7 @@ data class ChapterDataClass(
                 mangaId = mangaId,
                 read = false,
                 bookmarked = false,
+                fillermarked = false,
                 lastPageRead = 0,
                 lastReadAt = 0,
                 downloaded = false,

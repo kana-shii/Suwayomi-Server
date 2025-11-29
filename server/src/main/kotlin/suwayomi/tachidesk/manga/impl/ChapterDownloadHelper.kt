@@ -92,6 +92,7 @@ object ChapterDownloadHelper {
                 chapterData.index,
                 isRead = true,
                 isBookmarked = null,
+                isFillermarked = null,
                 markPrevRead = null,
                 lastPageRead = null,
             )

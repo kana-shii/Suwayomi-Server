@@ -130,6 +130,28 @@ class BookmarkedChapterCountForMangaDataLoader : KotlinDataLoader<Int, Int> {
         }
 }
 
+class FillermarkedChapterCountForMangaDataLoader : KotlinDataLoader<Int, Int> {
+    override val dataLoaderName = "FillermarkedChapterCountForMangaDataLoader"
+
+    override fun getDataLoader(graphQLContext: GraphQLContext): DataLoader<Int, Int> =
+        DataLoaderFactory.newDataLoader<Int, Int> { ids ->
+            future {
+                transaction {
+                    addLogger(Slf4jSqlDebugLogger)
+                    val fillermarkedChapterCountByMangaId =
+                        ChapterTable
+                            .select(ChapterTable.manga, ChapterTable.isFillermarked.count())
+                            .where {
+                                (ChapterTable.manga inList ids) and
+                                    (ChapterTable.isFillermarked eq true)
+                            }.groupBy(ChapterTable.manga)
+                            .associate { it[ChapterTable.manga].value to it[ChapterTable.isFillermarked.count()] }
+                    ids.map { fillermarkedChapterCountByMangaId[it]?.toInt() ?: 0 }
+                }
+            }
+        }
+}
+
 class HasDuplicateChaptersForMangaDataLoader : KotlinDataLoader<Int, Boolean> {
     override val dataLoaderName = "HasDuplicateChaptersForMangaDataLoader"
 

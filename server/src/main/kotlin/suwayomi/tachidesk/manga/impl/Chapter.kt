@@ -117,6 +117,7 @@ object Chapter {
                 mangaId = mangaId,
                 read = dbChapter[ChapterTable.isRead],
                 bookmarked = dbChapter[ChapterTable.isBookmarked],
+                fillermarked = dbChapter[ChapterTable.isFillermarked],
                 lastPageRead = dbChapter[ChapterTable.lastPageRead],
                 lastReadAt = dbChapter[ChapterTable.lastReadAt],
                 index = chapterList.size - index,
@@ -232,6 +233,7 @@ object Chapter {
                 val deletedChapterNumbers = TreeSet<Float>()
                 val deletedReadChapterNumbers = TreeSet<Float>()
                 val deletedBookmarkedChapterNumbers = TreeSet<Float>()
+                val deletedFillermarkedChapterNumbers = TreeSet<Float>()
                 val deletedDownloadedChapterNumberInfoMap = mutableMapOf<Float, MutableMap<String?, Int>>()
                 val deletedChapterNumberDateFetchMap = mutableMapOf<Float, Long>()
 
@@ -243,6 +245,7 @@ object Chapter {
                         if (!chapterUrls.contains(dbChapter.url)) {
                             if (dbChapter.read) deletedReadChapterNumbers.add(dbChapter.chapterNumber)
                             if (dbChapter.bookmarked) deletedBookmarkedChapterNumbers.add(dbChapter.chapterNumber)
+                            if (dbChapter.fillermarked) deletedFillermarkedChapterNumbers.add(dbChapter.chapterNumber)
                             if (dbChapter.downloaded) {
                                 val pageCountByScanlator =
                                     deletedDownloadedChapterNumberInfoMap.getOrPut(
@@ -282,12 +285,16 @@ object Chapter {
                                 this[ChapterTable.realUrl] = chapter.realUrl
                                 this[ChapterTable.isRead] = false
                                 this[ChapterTable.isBookmarked] = false
+                                this[ChapterTable.isFillermarked] = false
+
                                 this[ChapterTable.isDownloaded] = false
 
                                 // is recognized chapter number
                                 if (chapter.chapterNumber >= 0f && chapter.chapterNumber in deletedChapterNumbers) {
                                     this[ChapterTable.isRead] = chapter.chapterNumber in deletedReadChapterNumbers
                                     this[ChapterTable.isBookmarked] = chapter.chapterNumber in deletedBookmarkedChapterNumbers
+                                    this[ChapterTable.isFillermarked] = chapter.chapterNumber in deletedFillermarkedChapterNumbers
+
 
                                     // only preserve download status for chapters of the same scanlator, otherwise,
                                     // the downloaded files won't be found anyway
@@ -429,6 +436,7 @@ object Chapter {
         chapterIndex: Int,
         isRead: Boolean?,
         isBookmarked: Boolean?,
+        isFillermarked: Boolean?,
         markPrevRead: Boolean?,
         lastPageRead: Int?,
     ): Int {
@@ -442,13 +450,16 @@ object Chapter {
 
                 val chapterIdValue = chapter[ChapterTable.id].value
 
-                if (listOf(isRead, isBookmarked, lastPageRead).any { it != null }) {
+                if (listOf(isRead, isBookmarked, isFillermarked, lastPageRead).any { it != null }) {
                     ChapterTable.update({ (ChapterTable.manga eq mangaId) and (ChapterTable.sourceOrder eq chapterIndex) }) { update ->
                         isRead?.also {
                             update[ChapterTable.isRead] = it
                         }
                         isBookmarked?.also {
                             update[ChapterTable.isBookmarked] = it
+                        }
+                        isFillermarked?.also {
+                            update[ChapterTable.isFillermarked] = it
                         }
                         lastPageRead?.also {
                             update[ChapterTable.lastPageRead] = it
@@ -477,6 +488,7 @@ object Chapter {
     data class ChapterChange(
         val isRead: Boolean? = null,
         val isBookmarked: Boolean? = null,
+        val isFillermarked: Boolean?,
         val lastPageRead: Int? = null,
         val delete: Boolean? = null,
     )
@@ -500,7 +512,7 @@ object Chapter {
     ) {
         // Make sure change is defined
         if (input.change == null) return
-        val (isRead, isBookmarked, lastPageRead, delete) = input.change
+        val (isRead, isBookmarked, isFillermarked, lastPageRead, delete) = input.change
 
         // Handle deleting separately
         if (delete == true) {
@@ -508,7 +520,7 @@ object Chapter {
         }
 
         // return early if there are no other changes
-        if (listOfNotNull(isRead, isBookmarked, lastPageRead).isEmpty()) return
+        if (listOfNotNull(isRead, isBookmarked, isFillermarked, lastPageRead).isEmpty()) return
 
         // Make sure some filter is defined
         val condition =
@@ -544,6 +556,9 @@ object Chapter {
                 }
                 isBookmarked?.also {
                     update[ChapterTable.isBookmarked] = it
+                }
+                isFillermarked?.also {
+                    update[ChapterTable.isFillermarked] = it
                 }
                 lastPageRead?.also {
                     update[ChapterTable.lastPageRead] = it
@@ -767,6 +782,7 @@ object Chapter {
             isRead = isRead,
             lastPageRead = pageNo,
             isBookmarked = null,
+            isFillermarked = null,
             markPrevRead = null,
         )
 

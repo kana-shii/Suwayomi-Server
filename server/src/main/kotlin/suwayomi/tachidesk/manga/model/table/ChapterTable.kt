@@ -25,6 +25,7 @@ object ChapterTable : IntIdTable() {
 
     val isRead = bool("read").default(false)
     val isBookmarked = bool("bookmark").default(false)
+    val isFillermarked = bool("fillermark").default(false)
     val lastPageRead = integer("last_page_read").default(0)
     val lastReadAt = long("last_read_at").default(0)
     val fetchedAt = long("fetched_at").default(0)
@@ -57,6 +58,7 @@ fun ChapterTable.toDataClass(
     mangaId = chapterEntry[manga].value,
     read = chapterEntry[isRead],
     bookmarked = chapterEntry[isBookmarked],
+    fillermarked = chapterEntry[isFillermarked],
     lastPageRead = chapterEntry[lastPageRead],
     lastReadAt = chapterEntry[lastReadAt],
     index = chapterEntry[sourceOrder],

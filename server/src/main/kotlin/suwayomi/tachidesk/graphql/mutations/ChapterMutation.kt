@@ -34,6 +34,7 @@ import java.util.concurrent.CompletableFuture
 class ChapterMutation {
     data class UpdateChapterPatch(
         val isBookmarked: Boolean? = null,
+        val isFillermarked: Boolean? = null,
         val isRead: Boolean? = null,
         val lastPageRead: Int? = null,
     )
@@ -81,7 +82,7 @@ class ChapterMutation {
                 } else {
                     emptyMap()
                 }
-            if (patch.isRead != null || patch.isBookmarked != null || patch.lastPageRead != null) {
+            if (patch.isRead != null || patch.isBookmarked != null || patch.isFillermarked != null ||patch.lastPageRead != null) {
                 val now = Instant.now().epochSecond
 
                 BatchUpdateStatement(ChapterTable).apply {
@@ -92,6 +93,9 @@ class ChapterMutation {
                         }
                         patch.isBookmarked?.also {
                             this[ChapterTable.isBookmarked] = it
+                        }
+                        patch.isFillermarked?.also {
+                            this[ChapterTable.isFillermarked] = it
                         }
                         patch.lastPageRead?.also {
                             this[ChapterTable.lastPageRead] = it.coerceAtMost(chapterIdToPageCount[chapterId] ?: 0).coerceAtLeast(0)
