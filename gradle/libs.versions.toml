@@ -8,15 +8,15 @@ javalin = "6.7.0"
 jte = "3.2.1"
 jackson = "2.18.3" # jackson version locked by javalin, ref: `io.javalin.core.util.OptionalDependency`
 exposed = "0.61.0"
-dex2jar = "2.4.32"
+dex2jar = "2.4.33"
 polyglot = "24.2.2"
 settings = "1.3.0"
 twelvemonkeys = "3.12.0"
 graphqlkotlin = "8.8.1"
 xmlserialization = "0.91.3"
-ktlint = "1.7.1"
+ktlint = "1.8.0"
 koin = "4.1.1"
-moko = "0.25.1"
+moko = "0.25.2"
 
 [libraries]
 # Kotlin
@@ -99,7 +99,7 @@ sort = "com.github.gpanther:java-nat-sort:natural-comparator-1.1"
 android-stubs = "com.github.Suwayomi:android-jar:1.0.0"
 
 # Asm modificiation
-asm = "org.ow2.asm:asm:9.8" # version locked by Dex2Jar
+asm = "org.ow2.asm:asm:9.9" # version locked by Dex2Jar
 dex2jar-translator = { module = "de.femtopedia.dex2jar:dex-translator", version.ref = "dex2jar" }
 dex2jar-tools = { module = "de.femtopedia.dex2jar:dex-tools", version.ref = "dex2jar" }
 
@@ -118,7 +118,7 @@ commonscompress = "org.apache.commons:commons-compress:1.28.0"
 junrar = "com.github.junrar:junrar:7.5.7"
 
 # AES/CBC/PKCS7Padding Cypher provider
-bouncycastle = "org.bouncycastle:bcprov-jdk18on:1.82"
+bouncycastle = "org.bouncycastle:bcprov-jdk18on:1.83"
 
 # AndroidX annotations
 android-annotations = "androidx.annotation:annotation:1.9.1"
@@ -146,7 +146,7 @@ twelvemonkeys-imageio-webp = { module = "com.twelvemonkeys.imageio:imageio-webp"
 imageio-webp = "com.github.usefulness:webp-imageio:0.10.2"
 
 # Testing
-mockk = "io.mockk:mockk:1.14.6"
+mockk = "io.mockk:mockk:1.14.7"
 
 # cron scheduler
 cron4j = "it.sauronsoftware.cron4j:cron4j:2.2.5"
@@ -176,7 +176,7 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "14.0.1"}
 
 # Build config
-buildconfig = { id = "com.github.gmazzo.buildconfig", version = "5.7.1"}
+buildconfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.6"}
 
 # Download
 download = { id = "de.undercouch.download", version = "5.6.0"}
