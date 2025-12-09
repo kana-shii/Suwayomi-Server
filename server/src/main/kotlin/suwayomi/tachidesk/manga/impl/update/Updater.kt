@@ -177,7 +177,7 @@ class Updater : IUpdater {
         val wasPreviousUpdateTriggered =
             System.currentTimeMillis() - (
                 if (!isInitialScheduling) lastAutomatedUpdate else System.currentTimeMillis()
-            ) < updateInterval
+                ) < updateInterval
         if (!wasPreviousUpdateTriggered) {
             GlobalScope.launch {
                 autoUpdateTask()
@@ -314,7 +314,10 @@ class Updater : IUpdater {
                     Manga.getManga(job.manga.id, true)
                 }
                 Chapter.getChapterList(job.manga.id, true)
-                job.copy(status = JobStatus.COMPLETE)
+                // mark as complete and log success for this manga
+                val completedJob = job.copy(status = JobStatus.COMPLETE)
+                logger.info { "update(${job.manga.id}): SUCCESS (${job.manga.title})" }
+                completedJob
             } catch (e: Exception) {
                 logger.error(e) { "Error while updating ${job.manga}" }
                 if (e is CancellationException) throw e
@@ -328,6 +331,12 @@ class Updater : IUpdater {
         updateStatus(immediate = wasLastJob, isRunning = true, mangaUpdates = listOf(tracker[job.manga.id]!!))
 
         if (wasLastJob) {
+            // log a concise summary when all jobs finished (counts of successes/failures)
+            val completedCount = tracker.values.count { it.status == JobStatus.COMPLETE }
+            val failedCount = tracker.values.count { it.status == JobStatus.FAILED }
+            val total = tracker.size
+            logger.info { "Updates finished: completed=$completedCount failed=$failedCount total=$total" }
+
             updateStatus(isRunning = false)
         }
     }
