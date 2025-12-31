@@ -3,6 +3,8 @@
 .idea
 gradle.properties
 .fleet
+debug.log
+local.properties
 # But we need these
 !.idea/runConfigurations
 .kotlin
